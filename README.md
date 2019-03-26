@@ -6,6 +6,7 @@
 1. 支持动态设定/获取当前进度
 2. 支持使用XML参数定制控件
 3. 支持动画效果
+4. 支持指定起点
 -----------------------------------------
 
 ![image](https://github.com/XXXShaoZi/CircularProgressBar/blob/master/images/01.gif)
