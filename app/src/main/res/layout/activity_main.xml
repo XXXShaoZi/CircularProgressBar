@@ -4,11 +4,32 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.example.circularprogressbar.CircularProgressBar
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_margin="6dp"
-        app:width="6"
-        app:progress="80"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <com.example.circularprogressbar.CircularProgressBar
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="6dp"
+            app:progress="80"
+            app:width="6" />
+        <com.example.circularprogressbar.CircularProgressBar
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="6dp"
+            app:progress="50"
+            app:start_angle="90"
+            app:width="12" />
+        <com.example.circularprogressbar.CircularProgressBar
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="6dp"
+            app:progress="30"
+            app:start_angle="0"
+            app:width="9"/>
+    </LinearLayout>
 
 </FrameLayout>

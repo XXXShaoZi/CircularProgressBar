@@ -8,6 +8,9 @@ import android.graphics.RectF;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.Transformation;
 
 public class CircularProgressBar extends View {
     // 画圆环背景以及圆环进度的画笔
@@ -23,22 +26,26 @@ public class CircularProgressBar extends View {
     // 进度
     private int mTotal = 100;
     private int mProgress = 0;
+    // 起始角度
+    private int mStartAngle = -90;
+    // 动画
+    private ProgressAnimation mProgressAnimation = new ProgressAnimation();
 
     public CircularProgressBar( Context context ) {
         super(context);
-        initPaint();
+        initControls();
     }
 
     public CircularProgressBar( Context context, AttributeSet attrs ) {
         super(context, attrs);
         initWithAttrs(attrs);
-        initPaint();
+        initControls();
     }
 
     public CircularProgressBar( Context context, AttributeSet attrs, int defStyleAttr ) {
         super(context, attrs, defStyleAttr);
         initWithAttrs(attrs);
-        initPaint();
+        initControls();
     }
 
     private void initWithAttrs(AttributeSet attrs) {
@@ -57,15 +64,18 @@ public class CircularProgressBar extends View {
         mTotal = typedArray.getInt(
                 R.styleable.CircularProgressBar_total,
                 mTotal);
-        mProgress = typedArray.getInt(
+        mStartAngle = typedArray.getInt(
+                R.styleable.CircularProgressBar_start_angle,
+                mStartAngle);
+        setProgress(typedArray.getInt(
                 R.styleable.CircularProgressBar_progress,
-                mProgress);
+                mProgress));
 
         // 主动回收资源
         typedArray.recycle();
     }
 
-    private void initPaint(){
+    private void initControls(){
         mCircularPaint = new Paint();
         mCircularPaint.setColor(mBGCircularColor);
         mCircularPaint.setStrokeWidth(mCircularWidth);
@@ -79,6 +89,44 @@ public class CircularProgressBar extends View {
         mCircularProgressPaint.setStrokeWidth(mCircularWidth);
         mCircularProgressPaint.setAntiAlias(true);
         mCircularProgressPaint.setStyle(Paint.Style.STROKE);
+
+        // for test
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick( View v ) {
+                mProgressAnimation.setDelta(mProgress);
+                mProgress = 0;
+                startAnimation(mProgressAnimation);
+            }
+        });
+    }
+
+    private class ProgressAnimation extends Animation {
+        private int mBaseProgress;
+        private int mDelta;
+
+        @Override
+        public void initialize( int width, int height, int parentWidth, int parentHeight ) {
+            super.initialize(width, height, parentWidth, parentHeight);
+            setDuration(600);
+            setInterpolator(new LinearInterpolator());
+            mBaseProgress = mProgress;
+        }
+
+        @Override
+        protected void applyTransformation( float interpolatedTime, Transformation t ) {
+            super.applyTransformation(interpolatedTime, t);
+            if (interpolatedTime < 1.0f) {
+                mProgress = mBaseProgress + (int) (mDelta * interpolatedTime);
+            } else {
+                mProgress = mBaseProgress + mDelta;
+            }
+            postInvalidate();
+        }
+
+        public void setDelta( int delta ) {
+            mDelta = delta;
+        }
     }
 
     private int getColorWithId(final int resId){
@@ -112,15 +160,15 @@ public class CircularProgressBar extends View {
         drawArc(canvas, mCircularPaint, xCenter, yCenter, radius, 0, 360);
 
         // 画进度
-        int start = -90;
         int end = mTotal == mProgress ? 360 : 360 * mProgress / mTotal;
-        drawArc(canvas, mCircularProgressPaint, xCenter, yCenter, radius, start, end);
+        drawArc(canvas, mCircularProgressPaint, xCenter, yCenter, radius, mStartAngle, end);
     }
 
     public synchronized void setProgress(int progress) {
-        mProgress = progress > mTotal ? mTotal : progress;
-        //重绘
-        invalidate();
+        mProgressAnimation.reset();
+        int newProgress = progress > mTotal ? mTotal : progress;
+        mProgressAnimation.setDelta(newProgress - mProgress);
+        startAnimation(mProgressAnimation);
     }
 
     public int getProgress() {
@@ -134,4 +182,6 @@ public class CircularProgressBar extends View {
     public int getTotal(){
         return mTotal;
     }
+
+
 }

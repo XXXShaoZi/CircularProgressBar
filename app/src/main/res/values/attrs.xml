@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="CircularProgressBar">
-        <attr name="bg_color" format="integer"></attr>
-        <attr name="fg_color" format="integer"></attr>
-        <attr name="width" format="float"></attr>
-        <attr name="total" format="integer"></attr>
-        <attr name="progress" format="integer"></attr>
+        <attr name="bg_color" format="integer" />
+        <attr name="fg_color" format="integer" />
+        <attr name="width" format="float" />
+        <attr name="total" format="integer" />
+        <attr name="start_angle" format="integer" />
+        <attr name="progress" format="integer" />
     </declare-styleable>
 </resources>
