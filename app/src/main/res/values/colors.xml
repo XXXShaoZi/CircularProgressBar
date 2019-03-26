@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <!--圆环进度条-->
+    <color name="bg_progress">#E7F2FF</color>
+    <color name="fg_progress">#2A83F2</color>
+</resources>
