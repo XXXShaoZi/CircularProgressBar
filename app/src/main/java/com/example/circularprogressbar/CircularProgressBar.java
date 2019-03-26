@@ -42,12 +42,6 @@ public class CircularProgressBar extends View {
         initControls();
     }
 
-    public CircularProgressBar( Context context, AttributeSet attrs, int defStyleAttr ) {
-        super(context, attrs, defStyleAttr);
-        initWithAttrs(attrs);
-        initControls();
-    }
-
     private void initWithAttrs(AttributeSet attrs) {
         TypedArray typedArray = getContext().obtainStyledAttributes(
                 attrs, R.styleable.CircularProgressBar);
@@ -164,7 +158,7 @@ public class CircularProgressBar extends View {
         drawArc(canvas, mCircularProgressPaint, xCenter, yCenter, radius, mStartAngle, end);
     }
 
-    public synchronized void setProgress(int progress) {
+    public void setProgress(int progress) {
         mProgressAnimation.reset();
         int newProgress = progress > mTotal ? mTotal : progress;
         mProgressAnimation.setDelta(newProgress - mProgress);
@@ -175,7 +169,7 @@ public class CircularProgressBar extends View {
         return mProgress;
     }
 
-    public synchronized void setTotal(int total) {
+    public void setTotal(int total) {
         mTotal = total;
     }
 
