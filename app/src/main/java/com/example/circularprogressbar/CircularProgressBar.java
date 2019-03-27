@@ -159,7 +159,7 @@ public class CircularProgressBar extends View {
     }
 
     public void setProgress(int progress) {
-        mProgressAnimation.reset();
+        clearAnimation();
         int newProgress = progress > mTotal ? mTotal : progress;
         mProgressAnimation.setDelta(newProgress - mProgress);
         startAnimation(mProgressAnimation);
