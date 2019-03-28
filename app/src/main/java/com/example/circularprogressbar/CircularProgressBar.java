@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -16,6 +17,7 @@ public class CircularProgressBar extends View {
     // 画圆环背景以及圆环进度的画笔
     private Paint mCircularPaint;
     private Paint mCircularProgressPaint;
+    private Paint mDigitProgress;
 
     // 背景圆环颜色
     private int mBGCircularColor = getColorWithId(R.color.bg_progress);
@@ -84,6 +86,14 @@ public class CircularProgressBar extends View {
         mCircularProgressPaint.setAntiAlias(true);
         mCircularProgressPaint.setStyle(Paint.Style.STROKE);
 
+        mDigitProgress = new Paint();
+        mDigitProgress.setColor(mFGCircularColor);
+        mDigitProgress.setAntiAlias(true);
+        mDigitProgress.setStyle(Paint.Style.FILL);
+        mDigitProgress.setTextAlign(Paint.Align.CENTER);
+        mDigitProgress.setStrokeWidth(2f);
+        mDigitProgress.setTextSize(60f);
+
         // for test
         setOnClickListener(new OnClickListener() {
             @Override
@@ -102,7 +112,7 @@ public class CircularProgressBar extends View {
         @Override
         public void initialize( int width, int height, int parentWidth, int parentHeight ) {
             super.initialize(width, height, parentWidth, parentHeight);
-            setDuration(600);
+            setDuration(1000);
             setInterpolator(new LinearInterpolator());
             mBaseProgress = mProgress;
         }
@@ -156,6 +166,12 @@ public class CircularProgressBar extends View {
         // 画进度
         int end = mTotal == mProgress ? 360 : 360 * mProgress / mTotal;
         drawArc(canvas, mCircularProgressPaint, xCenter, yCenter, radius, mStartAngle, end);
+
+        // 画数字
+        String progressText = (mProgress * 100) / mTotal + "%";
+        Rect rc = new Rect();
+        mDigitProgress.getTextBounds(progressText, 0, progressText.length(), rc);
+        canvas.drawText(progressText, xCenter, yCenter + rc.height()/2, mDigitProgress);
     }
 
     public void setProgress(int progress) {
